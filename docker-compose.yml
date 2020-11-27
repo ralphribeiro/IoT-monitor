@@ -1,0 +1,51 @@
+version: '3.6'
+services:
+
+  influxdb:
+    container_name: influxdb
+    image: "influxdb:latest"
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+      - "8083:8083"
+      - "2003:2003"
+    #env_file:
+    #  - ./services/influxdb/influxdb.env
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb
+      - ./influxdb/db:/var/lib/influxdb/backup
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    restart: unless-stopped
+    user: "0"
+    ports:
+      - "3000:3000"
+    #env_file:
+    #  - ./services/grafana/grafana.env
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/log:/var/log/grafana
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto
+    restart: unless-stopped
+    user: "1883"
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/conf:/mosquitto/conf:ro
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+
+  telegraf:
+    container_name: telegraf
+    image: telegraf
+    restart: unless-stopped
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    depends_on:
+      - influxdb
+      - mosquitto
