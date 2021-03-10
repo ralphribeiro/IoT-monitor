@@ -3,7 +3,7 @@ services:
 
   influxdb:
     container_name: influxdb
-    image: "influxdb:latest"
+    image: influxdb:1.8.3
     restart: unless-stopped
     ports:
       - "8086:8086"
@@ -30,7 +30,7 @@ services:
 
   mosquitto:
     container_name: mosquitto
-    image: eclipse-mosquitto
+    image: eclipse-mosquitto:1.6.9
     restart: unless-stopped
     user: "1883"
     ports:
