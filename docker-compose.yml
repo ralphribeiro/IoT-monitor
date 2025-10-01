@@ -23,7 +23,7 @@ services:
       - "127.0.0.1:3000:3000"
     environment:
       # env vars to allow works on nginx
-      - GF_SERVER_ROOT_URL=http://192.168.0.36/grafana/
+      - GF_SERVER_ROOT_URL=http://127.0.0.1/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     volumes:
       - ./grafana/data:/var/lib/grafana
@@ -49,4 +49,18 @@ services:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     depends_on:
       - influxdb
+      - mosquitto
+
+
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ./homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    depends_on:
       - mosquitto
