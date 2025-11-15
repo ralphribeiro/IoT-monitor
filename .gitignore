@@ -2,3 +2,7 @@ influxdb/data
 influxdb/db
 grafana/data
 grafana/log
+mosquitto/data
+mosquitto/log
+telegraf/log
+homeassistant/config
